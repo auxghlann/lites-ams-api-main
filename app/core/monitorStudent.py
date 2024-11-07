@@ -6,7 +6,18 @@ class MonitorStudent:
 
     @staticmethod
     def add_student(stud_id: int, fName: str, lName: str, program: str, year: int) -> None:
-        ...
+        response = (
+            supabase.table("student")
+            .insert({
+                "student_id": stud_id, 
+                "fName": fName,
+                "lName": lName,
+                "program": program,
+                "year": year})
+            .execute()
+        )
+
+        return response
 
     @staticmethod 
     def update_student(stud_id: int, new_stud_id: int, new_fName: str, 
