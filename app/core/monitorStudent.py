@@ -37,7 +37,10 @@ class MonitorStudent:
 
     @staticmethod
     def delete_student(stud_id: int) -> None:
-        ...
+        response = supabase.table('student').delete().eq('student_id', stud_id).execute()
+
+        return response
+
     
     @staticmethod
     def get_students():
