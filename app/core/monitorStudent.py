@@ -20,9 +20,20 @@ class MonitorStudent:
         return response
 
     @staticmethod 
-    def update_student(stud_id: int, new_stud_id: int, new_fName: str, 
+    def update_student(stud_id: int, new_fName: str, 
                        new_lName: str, new_program: str, new_year: int):
-        ...
+        response = (
+            supabase.table("student")
+            .update({
+                "fName": new_fName,
+                "lName": new_lName,
+                "program": new_program,
+                "year": new_year})
+            .eq("student_id", stud_id)
+            .execute()
+        )
+
+        return response
 
     @staticmethod
     def delete_student(stud_id: int) -> None:
