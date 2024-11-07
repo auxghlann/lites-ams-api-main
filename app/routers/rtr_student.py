@@ -56,7 +56,12 @@ def update_student(student_record: StudentRecord):
         if response.data:
             return {
                 "status_code": 200,
-                "message": f"Student {student_id} Updated Successfully"
+                "message": f"Student {student_id} Deleted Successfully"
+            }
+        else:
+            return {
+                "status_code": 404,
+                "message": f"Student {student_id} does not exist"
             }
         
     except APIError as e:
@@ -68,8 +73,24 @@ def update_student(student_record: StudentRecord):
 
 @student_router.delete("/delete/{student_id}")
 def delete_student(student_id: int):
-    ...
+    try:
+        response = MonitorStudent.delete_student(stud_id=student_id)
 
+        if response.data:
+            return {
+                "status_code": 200,
+                "message": f"Student {student_id} Deleted Successfully"
+            }
+        else:
+            return {
+                "status_code": 404,
+                "message": f"Student {student_id} does not exist"
+            }
+    except APIError as e:
+        raise HTTPException(status_code=400, detail=str(e.details))
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e.details))
 
 @student_router.get("/get")
 def get_all_students() -> list[dict]:
