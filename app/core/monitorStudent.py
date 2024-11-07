@@ -1,0 +1,32 @@
+from app.core.database import supabase
+
+
+
+class MonitorStudent:
+
+    @staticmethod
+    def add_student(stud_id: int, fName: str, lName: str, program: str, year: int) -> None:
+        ...
+
+    @staticmethod 
+    def update_student(stud_id: int, new_stud_id: int, new_fName: str, 
+                       new_lName: str, new_program: str, new_year: int):
+        ...
+
+    @staticmethod
+    def delete_student(stud_id: int) -> None:
+        ...
+    
+    @staticmethod
+    def get_students():
+        response = supabase.table("student").select("*").execute()
+        
+        return response
+
+if __name__ == '__main__':
+    # MonitorStudent.add_student(stud_id=2203173, fName="Allan Khester", lName="Mesa", program="BSCS", year=3)
+    # MonitorStudent.add_student(stud_id=2203174, fName="Juan", lName="Dela Cruz", program="BSCS", year=3)
+    students = MonitorStudent.get_students()
+
+    for student in students:
+        print(student)
