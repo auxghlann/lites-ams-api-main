@@ -1,11 +1,11 @@
 from app.core.database import supabase
-
+from postgrest import APIResponse
 
 
 class MonitorStudent:
 
     @staticmethod
-    def add_student(stud_id: int, fName: str, lName: str, program: str, year: int) -> None:
+    def add_student(stud_id: int, fName: str, lName: str, program: str, year: int) -> APIResponse:
         response = (
             supabase.table("student")
             .insert({
@@ -36,14 +36,14 @@ class MonitorStudent:
         return response
 
     @staticmethod
-    def delete_student(stud_id: int) -> None:
+    def delete_student(stud_id: int) -> APIResponse:
         response = supabase.table('student').delete().eq('student_id', stud_id).execute()
 
         return response
 
     
     @staticmethod
-    def get_students():
+    def get_students() -> APIResponse:
         response = supabase.table("student").select("*").execute()
         
         return response
