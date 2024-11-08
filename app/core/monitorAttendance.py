@@ -1,10 +1,11 @@
 from app.core.database import supabase
 from datetime import datetime
+from postgrest import APIResponse
 
 class MonitorAttendance:
 
     @staticmethod
-    def add_attendance(stud_id: int, time_status: int) -> None:
+    def add_attendance(stud_id: int, time_status: int) -> APIResponse:
         now = datetime.now()
         formatted_datetime = now.strftime("%Y-%m-%d %H:%M:%S")
         response = (
@@ -19,7 +20,7 @@ class MonitorAttendance:
         return response
 
     @staticmethod
-    def delete_attendance(stud_id: int) -> None:
+    def delete_attendance(stud_id: int) -> APIResponse:
         response = (
             supabase.table("attendance")
             .delete().eq("student_id", stud_id)
@@ -28,6 +29,16 @@ class MonitorAttendance:
 
         return response
 
+
+    @staticmethod
+    def clear_attendance() -> APIResponse:
+        response = (
+            supabase.table("attendance")
+            .delete().neq("student_id", 0)
+            .execute()
+        )
+
+        return response
     # @staticmethod
     # def update_attendance(stud_id: int,
     #                       new_time_status: int | None = None) -> None:
@@ -36,7 +47,7 @@ class MonitorAttendance:
     #     ...
 
     @staticmethod
-    def get_attendances():
+    def get_attendances() -> APIResponse:
         response = (
             supabase.table("attendance")
             .select("*").execute()
