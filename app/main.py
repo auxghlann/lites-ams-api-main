@@ -9,6 +9,7 @@ app.include_router(rtr_student.student_router)
 @app.get('/')
 def root():
     return {
-        "hello": "world"
+        "hello": "world",
+        "About": "This is an API of LITES' Attendance Monitoring System"
     }
 
