@@ -20,14 +20,20 @@ class MonitorAttendance:
 
     @staticmethod
     def delete_attendance(stud_id: int) -> None:
-        #TODO()
-        ...
+        response = (
+            supabase.table("attendance")
+            .delete().eq("student_id", stud_id)
+            .execute()
+        )
 
-    @staticmethod
-    def update_attendance(stud_id: int,
-                          new_time_status: int | None = None) -> None:
-        #TODO()
-        ...
+        return response
+
+    # @staticmethod
+    # def update_attendance(stud_id: int,
+    #                       new_time_status: int | None = None) -> None:
+    #     #TODO()
+    #     !TBA if required
+    #     ...
 
     @staticmethod
     def get_attendances():
