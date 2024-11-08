@@ -42,7 +42,7 @@ def add_student(student_record: StudentRecord) -> dict:
 
 
 @student_router.put("/update")
-def update_student(student_record: StudentRecord):
+def update_student(student_record: StudentRecord) -> dict:
     try:
         student_id: int = student_record.student_id
         fName: str = student_record.fName
@@ -72,7 +72,7 @@ def update_student(student_record: StudentRecord):
 
 
 @student_router.delete("/delete/{student_id}")
-def delete_student(student_id: int):
+def delete_student(student_id: int) -> dict:
     try:
         response = MonitorStudent.delete_student(stud_id=student_id)
 
