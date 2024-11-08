@@ -38,7 +38,7 @@ def add_student(student_record: StudentRecord) -> dict:
             raise HTTPException(status_code=400, detail=str(e.details))
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e.details))
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @student_router.put("/update")
@@ -68,7 +68,7 @@ def update_student(student_record: StudentRecord):
         raise HTTPException(status_code=400, detail=str(e.details))
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e.details))
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @student_router.delete("/delete/{student_id}")
@@ -90,7 +90,7 @@ def delete_student(student_id: int):
         raise HTTPException(status_code=400, detail=str(e.details))
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e.details))
+        raise HTTPException(status_code=500, detail=str(e))
 
 @student_router.get("/get")
 def get_all_students() -> list[dict]:
