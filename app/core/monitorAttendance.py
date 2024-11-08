@@ -4,21 +4,39 @@ from datetime import datetime
 class MonitorAttendance:
 
     @staticmethod
-    def add_attendance(stud_id: int, time_status: int, date_time: datetime) -> None:
-       ...
+    def add_attendance(stud_id: int, time_status: int) -> None:
+        now = datetime.now()
+        formatted_datetime = now.strftime("%Y-%m-%d %H:%M:%S")
+        response = (
+            supabase.table("attendance")
+            .insert({
+                "student_id": stud_id, 
+                "time_status": time_status,
+                "date_time": formatted_datetime})
+            .execute()
+        )
+        
+        return response
 
     @staticmethod
     def delete_attendance(stud_id: int) -> None:
+        #TODO()
         ...
 
     @staticmethod
     def update_attendance(stud_id: int,
                           new_time_status: int | None = None) -> None:
+        #TODO()
         ...
 
     @staticmethod
     def get_attendances():
-        ...
+        response = (
+            supabase.table("attendance")
+            .select("*").execute()
+        )
+
+        return response
 
 
 if __name__ == '__main__':
