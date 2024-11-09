@@ -145,3 +145,5 @@ test/
 # igonore mock database / db viewer
 */mock_attendance.db
 .devdbrc
+
+.vercel
