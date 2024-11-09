@@ -1,14 +1,21 @@
+import os
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import FileResponse
 from app.core.monitorAttendance import MonitorAttendance
 from datetime import datetime
 from pydantic import BaseModel
 from postgrest.exceptions import APIError
+from app.utils.excel_util import create_excel_from_records
 
 attendance_router = APIRouter(prefix="/attendance")
 
 class AttendanceRecord(BaseModel):
     student_id: int
     time_status: int | None
+
+class FilePath(BaseModel):
+    file_path: str
+    file_name: str = "attendance.xlsx"
 
 @attendance_router.post("/add")
 def add_attendance(attendance_record: AttendanceRecord) -> dict:
@@ -79,5 +86,23 @@ def get_all_attendance() -> list[dict]:
             raise HTTPException(status_code=404, detail="No attendance found")
     
         return records.data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@attendance_router.post("/export")
+def export_attendances_to_excel(file_path: FilePath):
+    try:
+        records = MonitorAttendance.get_attendances()
+        if not records:
+            raise HTTPException(status_code=404, detail="No students found")
+        
+        excel_file_path = os.path.join(file_path.file_path, file_path.file_name)
+        create_excel_from_records(records.data, excel_file_path)
+        
+        if not os.path.exists(excel_file_path):
+            raise HTTPException(status_code=500, detail="Failed to create Excel file")
+        
+        return FileResponse(path=excel_file_path, filename=file_path.file_name, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
