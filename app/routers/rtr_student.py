@@ -56,7 +56,7 @@ def update_student(student_record: StudentRecord) -> dict:
         if response.data:
             return {
                 "status_code": 200,
-                "message": f"Student {student_id} Deleted Successfully"
+                "message": f"Student {student_id} Updated Successfully"
             }
         else:
             return {
