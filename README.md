@@ -7,7 +7,7 @@ This API provides functionalities to manage student record
 **Base URL:** `url/student`
 
 
-**Data Model:**
+### **Data Model:**
 
 * `StudentRecord`: This model defines the expected data format for student information.
     * `student_id`: (int) Unique identifier for the student.
@@ -16,7 +16,7 @@ This API provides functionalities to manage student record
     * `program`: (str) Student's program of study.
     * `year`: (int) Student's year level.
 
-## **Endpoints:**
+### **Endpoints:**
 
 **1. Add Student**
 
