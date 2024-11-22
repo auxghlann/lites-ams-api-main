@@ -5,7 +5,7 @@ from postgrest import APIResponse
 class MonitorAttendance:
 
     @staticmethod
-    def add_attendance(stud_id: int, time_status: int) -> APIResponse:
+    def add_attendance(stud_id: str, time_status: int) -> APIResponse:
         now = datetime.now()
         formatted_datetime = now.strftime("%Y-%m-%d %H:%M:%S")
         response = (
@@ -20,7 +20,7 @@ class MonitorAttendance:
         return response
 
     @staticmethod
-    def delete_attendance(stud_id: int) -> APIResponse:
+    def delete_attendance(stud_id: str) -> APIResponse:
         response = (
             supabase.table("attendance")
             .delete().eq("student_id", stud_id)

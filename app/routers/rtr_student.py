@@ -6,7 +6,7 @@ from postgrest.exceptions import APIError
 student_router = APIRouter(prefix="/student")
 
 class StudentRecord(BaseModel):
-    student_id: int
+    student_id: str
     fName: str
     lName: str
     program: str
@@ -17,7 +17,7 @@ class StudentRecord(BaseModel):
 def add_student(student_record: StudentRecord) -> dict:
     
     try:
-        student_id: int = student_record.student_id
+        student_id: str = student_record.student_id
         fName: str = student_record.fName
         lName: str = student_record.lName
         program: str = student_record.program
@@ -44,7 +44,7 @@ def add_student(student_record: StudentRecord) -> dict:
 @student_router.put("/update")
 def update_student(student_record: StudentRecord) -> dict:
     try:
-        student_id: int = student_record.student_id
+        student_id: str = student_record.student_id
         fName: str = student_record.fName
         lName: str = student_record.lName
         program: str = student_record.program
@@ -72,7 +72,7 @@ def update_student(student_record: StudentRecord) -> dict:
 
 
 @student_router.delete("/delete/{student_id}")
-def delete_student(student_id: int) -> dict:
+def delete_student(student_id: str) -> dict:
     try:
         response = MonitorStudent.delete_student(stud_id=student_id)
 

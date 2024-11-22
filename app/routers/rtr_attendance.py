@@ -10,7 +10,7 @@ from app.utils.excel_util import create_excel_from_records
 attendance_router = APIRouter(prefix="/attendance")
 
 class AttendanceRecord(BaseModel):
-    student_id: int
+    student_id: str
     time_status: int | None
 
 class FilePath(BaseModel):
@@ -20,7 +20,7 @@ class FilePath(BaseModel):
 @attendance_router.post("/add")
 def add_attendance(attendance_record: AttendanceRecord) -> dict:
     try:
-        student_id: int = attendance_record.student_id
+        student_id: str = attendance_record.student_id
         time_status: int = attendance_record.time_status
 
         response = MonitorAttendance.add_attendance(
@@ -44,7 +44,7 @@ def add_attendance(attendance_record: AttendanceRecord) -> dict:
 #     !TBA if required
 #     ...
 @attendance_router.delete("/delete/{student_id}")
-def delete_attendance(student_id: int) -> dict:
+def delete_attendance(student_id: str) -> dict:
     try:
         response = MonitorAttendance.delete_attendance(stud_id=student_id)
 

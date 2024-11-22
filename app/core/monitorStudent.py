@@ -5,7 +5,7 @@ from postgrest import APIResponse
 class MonitorStudent:
 
     @staticmethod
-    def add_student(stud_id: int, fName: str, lName: str, program: str, year: int) -> APIResponse:
+    def add_student(stud_id: str, fName: str, lName: str, program: str, year: int) -> APIResponse:
         response = (
             supabase.table("student")
             .insert({
@@ -20,7 +20,7 @@ class MonitorStudent:
         return response
 
     @staticmethod 
-    def update_student(stud_id: int, new_fName: str, 
+    def update_student(stud_id: str, new_fName: str, 
                        new_lName: str, new_program: str, new_year: int):
         response = (
             supabase.table("student")
@@ -36,7 +36,7 @@ class MonitorStudent:
         return response
 
     @staticmethod
-    def delete_student(stud_id: int) -> APIResponse:
+    def delete_student(stud_id: str) -> APIResponse:
         response = supabase.table('student').delete().eq('student_id', stud_id).execute()
 
         return response
