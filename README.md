@@ -10,7 +10,7 @@ This API provides functionalities to manage student record
 ### **Data Model:**
 
 * `StudentRecord`: This model defines the expected data format for student information.
-    * `student_id`: (int) Unique identifier for the student.
+    * `student_id`: (str) Unique identifier for the student.
     * `fName`: (str) First name of the student.
     * `lName`: (str) Last name of the student.
     * `program`: (str) Student's program of study.
@@ -29,7 +29,7 @@ POST /student/add
 Content-Type: application/json
 
 {
-  "student_id": 123,
+  "student_id": "123",
   "fName": "John",
   "lName": "Doe",
   "program": "BSCS",
@@ -73,7 +73,7 @@ PUT /student/update
 Content-Type: application/json
 
 {
-  "student_id": 123,
+  "student_id": "123",
   "fName": "John",
   "lName": "Doe",
   "program": "Computer Science",
@@ -111,7 +111,7 @@ Content-Type: application/json
 * **Method:** DELETE
 * **URL:** `/delete/{student_id}`
 * **Path Parameter:**
-    * `{student_id}`: (int) Unique identifier of the student to be deleted.
+    * `{student_id}`: (str) Unique identifier of the student to be deleted.
   * **Success (Status Code: 200):**
       * Message: "Student {student_id} Deleted Successfully"
 
@@ -147,14 +147,14 @@ Content-Type: application/json
 ```json
 [
   {
-    "student_id": 123,
+    "student_id": "123",
     "fName": "John",
     "lName": "Doe",
     "program": "BSCS",
     "year": 2
   },
   {
-    "student_id": 456,
+    "student_id": "456",
     "fName": "Juan",
     "lName": "Dela Cruz",
     "program": "BSIT",
@@ -178,7 +178,7 @@ This API provides functionalities to manage attendance record.
 ### Data Models
 
 * **AttendanceRecord:**
-    * `student_id`: (int) Unique identifier of the student.
+    * `student_id`: (str) Unique identifier of the student.
     * `time_status`: (int | None) Storing time-related information (e.g., 1: time-out, 0: time-out).
 
 * **FilePath:**
@@ -200,7 +200,7 @@ POST /attendance/add
 Content-Type: application/json
 
 {
-  "student_id": 123,
+  "student_id": "123",
   "time_status": 1
 }
 ```
@@ -224,7 +224,7 @@ Content-Type: application/json
 * **Method:** DELETE
 * **URL:** `/delete/{student_id}`
 * **Path Parameter:**
-    * `student_id`: (int) Unique identifier of the student.
+    * `student_id`: (str) Unique identifier of the student.
 * **Success Response:**
     * Status Code: 200
     * Body: JSON object containing a success message with student ID if deleted or a message indicating the student's attendance record doesn't exist.
@@ -272,11 +272,11 @@ Content-Type: application/json
 ```json
 [
   {
-    "student_id": 123,
+    "student_id": "123",
     "time_status": 1
   },
   {
-    "student_id": 456,
+    "student_id": "456",
     "time_status": 1
   },
   ...
