@@ -1,13 +1,15 @@
 from app.core.database import supabase
 from datetime import datetime
 from postgrest import APIResponse
-
+import pytz
 class MonitorAttendance:
 
     @staticmethod
     def add_attendance(stud_id: str, time_status: int) -> APIResponse:
-        now = datetime.now()
-        formatted_datetime = now.strftime("%Y-%m-%d %H:%M:%S")
+        local_tz = pytz.timezone("Asia/Manila")
+        # Create a time zone-aware datetime object representing the current local time
+        now_local = datetime.now(local_tz)
+        formatted_datetime = now_local.strftime("%Y-%m-%d %H:%M:%S")
         response = (
             supabase.table("attendance")
             .insert({
