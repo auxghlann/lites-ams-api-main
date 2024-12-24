@@ -23,8 +23,13 @@ def add_attendance(attendance_record: AttendanceRecord) -> dict:
         student_id: str = attendance_record.student_id
         time_status: int = attendance_record.time_status
 
-        response = MonitorAttendance.add_attendance(
-                                    stud_id=student_id, time_status=time_status)
+        # Check for duplicates
+        if MonitorAttendance.check_duplicates(stud_id=student_id, time_status=time_status):
+            raise HTTPException(status_code=409, detail="Duplicate entry found for student_id and time_status")
+        
+        else:
+            response = MonitorAttendance.add_attendance(
+                                        stud_id=student_id, time_status=time_status)
 
         if response.data:
             return {
