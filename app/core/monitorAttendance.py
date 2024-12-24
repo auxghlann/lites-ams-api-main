@@ -5,6 +5,21 @@ import pytz
 class MonitorAttendance:
 
     @staticmethod
+    def check_duplicates(stud_id: str, time_status:int) -> bool:
+        is_exist = (
+            supabase.table("attendance")
+            .select("student_id")
+            .eq("student_id", stud_id)
+            .eq("time_status", time_status)
+            .execute()
+        )
+
+        if is_exist.data:
+            return True
+    
+        return False
+    
+    @staticmethod
     def add_attendance(stud_id: str, time_status: int) -> APIResponse:
         local_tz = pytz.timezone("Asia/Manila")
         # Create a time zone-aware datetime object representing the current local time
