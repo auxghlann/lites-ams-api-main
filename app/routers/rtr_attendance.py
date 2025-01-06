@@ -48,20 +48,20 @@ def add_attendance(attendance_record: AttendanceRecord) -> dict:
 #     #TODO()
 #     !TBA if required
 #     ...
-@attendance_router.delete("/delete/{student_id}")
-def delete_attendance(student_id: str) -> dict:
+@attendance_router.delete("/delete")
+def delete_attendance(student_id: str, time_status: int) -> dict:
     try:
-        response = MonitorAttendance.delete_attendance(stud_id=student_id)
+        response = MonitorAttendance.delete_attendance(stud_id=student_id, time_status=time_status)
 
         if response.data:
             return {
                 "status_code": 200,
-                "message": f"Attendance of Student {student_id} Deleted Successfully"
+                "message": f"Attendance of Student {student_id} with time status {time_status} Deleted Successfully"
             }
         else:
             return {
                 "status_code": 404,
-                "message": f"Attendance of Student {student_id} does not exist"
+                "message": f"Attendance of Student {student_id} with time status {time_status} does not exist"
             }
     except APIError as e:
         raise HTTPException(status_code=400, detail=str(e.details))
@@ -70,7 +70,7 @@ def delete_attendance(student_id: str) -> dict:
         raise HTTPException(status_code=500, detail=str(e))
 
 @attendance_router.delete("/clear")
-def clear_attendance():
+def clear_attendance() -> dict:
     try:
         response = MonitorAttendance.clear_attendance()
         if response.data:
@@ -96,7 +96,7 @@ def get_all_attendance() -> list[dict]:
 
 
 @attendance_router.post("/export")
-def export_attendances_to_excel(file_path: FilePath):
+def export_attendances_to_excel(file_path: FilePath) -> FileResponse:
     try:
         records = MonitorAttendance.get_attendances()
         if not records:
