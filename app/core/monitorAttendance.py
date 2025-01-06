@@ -37,10 +37,12 @@ class MonitorAttendance:
         return response
 
     @staticmethod
-    def delete_attendance(stud_id: str) -> APIResponse:
+    def delete_attendance(stud_id: str, time_status: int) -> APIResponse:
         response = (
             supabase.table("attendance")
-            .delete().eq("student_id", stud_id)
+            .delete()
+            .eq("student_id", stud_id)
+            .eq("time_status", time_status)
             .execute()
         )
 
