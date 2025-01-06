@@ -1,4 +1,4 @@
-# LITES Attendance Monitoring System API
+# LITES Attendance Monitoring System API V1.01 (updated jan 06, 2025)
 
 ## Student Management API
 
@@ -215,30 +215,41 @@ Content-Type: application/json
 }
 ```
 
+* **Conflict (Status Code: 409):**
+    * Occurs when a duplicate attendance record is found.
+
+```json
+{
+  "status_code": 409,
+  "message": "Duplicate entry found for student_id and time_status"
+}
+```
+
 * **Error Responses:**
     * Status Code: 400 (Bad Request) with details of the error encountered during attendance recording.
     * Status Code: 500 (Internal Server Error) for unexpected errors.
 
-**2. Delete Attendance (by student ID):**
+**2. Delete Attendance (by student ID and time status):**
 
 * **Method:** DELETE
-* **URL:** `/delete/{student_id}`
-* **Path Parameter:**
+* **URL:** `/delete`
+* **Query Parameters:**
     * `student_id`: (str) Unique identifier of the student.
+    * `time_status`: (int) Time status of the attendance record.
 * **Success Response:**
     * Status Code: 200
-    * Body: JSON object containing a success message with student ID if deleted or a message indicating the student's attendance record doesn't exist.
+    * Body: JSON object containing a success message with student ID and time status if deleted or a message indicating the student's attendance record doesn't exist.
   
 ```json
 {
   "status_code": 200,
-  "message": "Attendance of Student 123 Deleted Successfully"
+  "message": "Attendance of Student 123 with time status 1 Deleted Successfully"
 }
 ```
 
 * **Error Responses:**
     * Status Code: 400 (Bad Request) with details of the error encountered during deletion.
-    * Status Code: 404 (Not found) with details of the error encountered during record clearing.
+    * Status Code: 404 (Not Found) with details of the error encountered during record clearing.
     * Status Code: 500 (Internal Server Error) for unexpected errors.
 
 
