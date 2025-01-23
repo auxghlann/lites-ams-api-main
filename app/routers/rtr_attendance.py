@@ -18,7 +18,7 @@ class SearchAttendance(BaseModel):
     student_id: str
 
 class File(BaseModel):
-    file_path: str
+    # file_path: str
     file_name: str = "attendance.xlsx"
 
 @attendance_router.post("/add")
@@ -115,20 +115,29 @@ def get_all_attendance() -> list[dict]:
 @attendance_router.post("/export")
 def export_attendances_to_excel(file: File) -> StreamingResponse:
     try:
-        records = MonitorAttendance.get_attendances()
-        if not records:
-            raise HTTPException(status_code=404, detail="No students found")
+        # Step 1: Retrieve attendance records
+        records = MonitorAttendance.get_attendances()  # Replace with your data-fetching logic
+        if not records or not records.data:
+            raise HTTPException(status_code=404, detail="No attendance records found.")
         
-        # Create an in-memory bytes buffer
+        # Step 2: Validate and prepare the file name
+        file_name = file.file_name if file.file_name else "attendance.xlsx"
+        if not file_name.endswith(".xlsx"):
+            file_name += ".xlsx"
+
+        # Step 3: Create an in-memory Excel file using the retrieved data
         buffer = io.BytesIO()
-        create_excel_from_records(records.data, buffer)
+        create_excel_from_records(records.data, buffer) 
+        buffer.seek(0)
         
-        buffer.seek(0)  # Move the cursor to the beginning of the buffer
-        
+        # Step 4: Return the Excel file as a StreamingResponse
         return StreamingResponse(
             buffer,
-            media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            headers={'Content-Disposition': f'attachment; filename={file.file_name}'}
+            media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            headers={"Content-Disposition": f'attachment; filename="{file_name}"'}
         )
+    except HTTPException as http_ex:
+        raise http_ex  # Reraise HTTPExceptions
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        # Log the exception (optional: add a logger)
+        raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
