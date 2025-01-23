@@ -1,6 +1,7 @@
-import os
+import os, io
+from typing import Optional
 from fastapi import APIRouter, HTTPException
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from app.core.monitorAttendance import MonitorAttendance
 from datetime import datetime
 from pydantic import BaseModel
@@ -11,9 +12,12 @@ attendance_router = APIRouter(prefix="/attendance")
 
 class AttendanceRecord(BaseModel):
     student_id: str
-    time_status: int | None
+    time_status: int
 
-class FilePath(BaseModel):
+class SearchAttendance(BaseModel):
+    student_id: str
+
+class File(BaseModel):
     file_path: str
     file_name: str = "attendance.xlsx"
 
@@ -82,7 +86,20 @@ def clear_attendance() -> dict:
         raise HTTPException(status_code=400, detail=str(e.details))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@attendance_router.post("/search")
+def search_student_attendance(search_attendance: SearchAttendance) -> list[dict]:
+
+    try:
+        stud_id: str = search_attendance.student_id
+        searched_record = MonitorAttendance.search_student_attendance(stud_id=stud_id)
+        return searched_record.data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
     
+
 @attendance_router.get("/get")
 def get_all_attendance() -> list[dict]:
     try:
@@ -96,18 +113,22 @@ def get_all_attendance() -> list[dict]:
 
 
 @attendance_router.post("/export")
-def export_attendances_to_excel(file_path: FilePath) -> FileResponse:
+def export_attendances_to_excel(file: File) -> StreamingResponse:
     try:
         records = MonitorAttendance.get_attendances()
         if not records:
             raise HTTPException(status_code=404, detail="No students found")
         
-        excel_file_path = os.path.join(file_path.file_path, file_path.file_name)
-        create_excel_from_records(records.data, excel_file_path)
+        # Create an in-memory bytes buffer
+        buffer = io.BytesIO()
+        create_excel_from_records(records.data, buffer)
         
-        if not os.path.exists(excel_file_path):
-            raise HTTPException(status_code=500, detail="Failed to create Excel file")
+        buffer.seek(0)  # Move the cursor to the beginning of the buffer
         
-        return FileResponse(path=excel_file_path, filename=file_path.file_name, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        return StreamingResponse(
+            buffer,
+            media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            headers={'Content-Disposition': f'attachment; filename={file.file_name}'}
+        )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
