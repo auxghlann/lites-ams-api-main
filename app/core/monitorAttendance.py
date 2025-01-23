@@ -20,6 +20,17 @@ class MonitorAttendance:
         return False
     
     @staticmethod
+    def search_student_attendance(stud_id: str) -> APIResponse:
+        response: APIResponse = (
+            supabase.table("attendance")
+            .select("*")
+            .eq("student_id", stud_id)
+            .execute()
+        )
+
+        return response
+    
+    @staticmethod
     def add_attendance(stud_id: str, time_status: int) -> APIResponse:
         local_tz = pytz.timezone("Asia/Manila")
         # Create a time zone-aware datetime object representing the current local time
@@ -69,7 +80,7 @@ class MonitorAttendance:
     def get_attendances() -> APIResponse:
         response = (
             supabase.table("attendance")
-            .select("*").execute()
+            .select("student_id", "time_status", "date_time").execute()
         )
 
         return response
