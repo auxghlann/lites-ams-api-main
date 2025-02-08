@@ -11,7 +11,8 @@ app.include_router(rtr_student.student_router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost", "http://127.0.0.1", "http://localhost:5173",
-                    "http://127.0.0.1:5500"],
+                    "http://127.0.0.1:5500",
+                    "https://attendance-management-system-murex.vercel.app/"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
