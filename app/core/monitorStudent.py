@@ -47,6 +47,18 @@ class MonitorStudent:
         response = supabase.table("student").select("*").execute()
         
         return response
+    
+
+    @staticmethod
+    def search_student(stud_id: str) -> APIResponse:
+        response = (
+            supabase.table("student")
+            .select("*")
+            .eq("student_id", stud_id)
+            .execute()
+        )
+
+        return response
 
 if __name__ == '__main__':
     # MonitorStudent.add_student(stud_id=2203173, fName="Allan Khester", lName="Mesa", program="BSCS", year=3)
